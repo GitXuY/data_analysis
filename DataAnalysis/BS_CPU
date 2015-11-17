@@ -1,0 +1,50 @@
+# -*- coding: UTF-8 -*-from os.path import exists, join
+from os import pathsep
+import string
+
+
+
+def split_words(unsplited_file, splited_file):
+	file_handel = open(unsplited_file, 'r')
+	file_content = file_handel.read()
+	for file_line in file_content.splitlines():
+		words = file_line.split('\t')
+		"""
+		words[5] : network ID
+		words[9] : CPU peak usage
+		words[10] : CPU average usage
+		words[11] : CPU overload rate
+		"""
+		splited_file.write('{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\n'.format(words[4], words[5], words[1], words[2], words[9], words[10], words[11]))
+	splited_file.close()
+
+
+def search_file(filename, file_path):
+	"""Given a search path, find file
+	"""
+	file_found = 0
+	paths = string.split(file_path, pathsep)
+	for path in paths:
+		if exists(join(path, filename)):
+			file_found = 1
+			break
+	if file_found:
+		return True
+	else:
+		return False
+
+
+# if __name__ == '___main__':
+# split the origin source file into seperate "words"
+WORKING_PATH = r'/Users/Dijkstraaaaa/Documents/1'
+output_file = open(r'%s/2.txt' % WORKING_PATH, 'w')
+split_words(r'%s/1.txt' % WORKING_PATH, output_file)
+
+file1 = open(r'%s/2.txt' % WORKING_PATH, 'r')
+file1_content = file1.read()
+for line in file1_content.splitlines():
+	file1_words = line.split()
+	network_ID = file1_words[0] + '-' + file1_words[1]
+	network_ID_file = open(r'%s/%s.txt' % (WORKING_PATH, network_ID), 'a')
+	network_ID_file.write(line + '\n')
+	network_ID_file.close()
