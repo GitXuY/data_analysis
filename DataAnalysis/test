@@ -1,10 +1,98 @@
-infilename = r'/Users/Dijkstraaaaa/Documents/1/320503_268346.txt'
-outfilename = '/Users/Dijkstraaaaa/Documents/1/320503_268346 4.txt'
+# -*- coding: UTF-8 -*-
+import os
+import csv
+from openpyxl import load_workbook
 
-lines_seen = set() # holds lines already seen
-outfile = open(outfilename, "w")
-for line in open(infilename, "r"):
-    if line not in lines_seen: # not a duplicate
-        outfile.write(line)
-        lines_seen.add(line)
-outfile.close()
+column_dic = {"SUBNET_ID": 5, "NET_ELEMENT_ID": 6, "CELL_ID": 7, "START_TIME": 2, "END_TIME": 3, "UP_PRB_PEAK": 168,
+              "UP_PRB_AVERAGE": 170, "UP_PRB_OVERLOAD": 173, "DOWN_PRB_PEAK": 169, "DOWN_PRB_AVERAGE": 171,
+              "DOWN_PRB_OVERLOAD": 174}
+column_name = ["SUBNET_ID", "NET_ELEMENT_ID", "CELL_ID", "START_TIME", "END_TIME", "UP_PRB_PEAK", "UP_PRB_AVERAGE",
+               "UP_PRB_OVERLOAD", "DOWN_PRB_PEAK", "DOWN_PRB_AVERAGE", "DOWN_PRB_OVERLOAD"]
+
+
+def generate_file_list(day_num, file_path):
+	# use DAY_NUM to generate empty 2-D list
+	file_matrix = []
+	while day_num != 0:
+		file_matrix.append([])
+		day_num -= 1
+
+	# walk the file path
+	for root, dirs, files in os.walk(file_path):
+		for f in files:
+			if f.startswith("TYPE2"):
+				f_words = f.split("_")
+				# date index
+				day_info = f_words[-2]
+				day_num = int(day_info[3:])
+				# file index
+				serial_info = f_words[-1]
+				file_matrix[day_num - 1].append(serial_info)
+	return file_matrix
+
+
+def extract_csv_file(csv_file_path, _output_folder_path):
+	global column_dic
+	global column_name
+	with open(csv_file_path, 'rb') as csv_file:
+		file_reader = csv.reader(csv_file)
+		for row in file_reader:
+			subnet_id = row[column_dic['SUBNET_ID'] - 1]
+			net_element_id = row[column_dic['NET_ELEMENT_ID'] - 1]
+			cell_id = row[column_dic['CELL_ID'] - 1]
+			output_file_name = '_'.join([str(subnet_id), str(net_element_id), str(cell_id)]) + '.txt'
+			output_file_path = os.path.join(_output_folder_path, output_file_name)
+			if not os.path.isfile(output_file_path):
+				output_file = open(output_file_path, 'a')
+				output_file.write("\t".join(column_name) + "\n")
+			else:
+				output_file = open(output_file_path, 'a')
+			content_list = []
+			for item in column_name:
+				content_list.append(row[column_dic[item] - 1])
+			output_file.write("\t".join(str(v) for v in content_list) + "\n")
+			output_file.close()
+
+
+def extract_excel_file(excel_file_path, output_folder_path):
+	global column_dic
+	global column_name
+	work_book = load_workbook(filename=excel_file_path)
+	work_sheet = work_book.worksheets[0]  # ws is now an IterableWorksheet
+	# The first 4 rows are table info
+	for row in range(work_sheet.min_row + 4, work_sheet.max_row + 1):
+		subnet_id = work_sheet.cell(row=row, column=column_dic['SUBNET_ID']).value
+		net_element_id = work_sheet.cell(row=row, column=column_dic['NET_ELEMENT_ID']).value
+		cell_id = work_sheet.cell(row=row, column=column_dic['CELL_ID']).value
+		output_file_name = '_'.join([str(subnet_id), str(net_element_id), str(cell_id)]) + '.txt'
+		output_file_path = os.path.join(output_folder_path, output_file_name)
+		if not os.path.isfile(output_file_path):
+			output_file = open(output_file_path, 'a')
+			output_file.write("\t".join(column_name) + "\n")
+		else:
+			output_file = open(output_file_path, 'a')
+		content_list = []
+		for item in column_name:
+			content_list.append(work_sheet.cell(row=row, column=column_dic[item]).value)
+		output_file.write("\t".join(str(v) for v in content_list) + "\n")
+		output_file.close()
+
+
+def main():
+	data_path = r'/Users/Dijkstraaaaa/Documents/Data/Mon1'
+	output_path = r'/Users/Dijkstraaaaa/Documents/TYPE2/origin2'
+
+	file_matrix = generate_file_list(31, data_path)
+	for i in range(len(file_matrix)):
+		for j in range(len(file_matrix[i])):
+			file_name = 'TYPE2_Mon1_Day%s' % (i + 1) + '_%s' % file_matrix[i][j]
+			print file_name
+			date = 'Day' + str(i + 1)
+			file_path = os.path.join(data_path, date, 'TYPE2', file_name)
+			if file_path.endswith("xlsx"):
+				extract_excel_file(file_path, output_path)
+			if file_path.endswith("csv"):
+				extract_csv_file(file_path, output_path)
+
+if __name__ == '__main__':
+	main()

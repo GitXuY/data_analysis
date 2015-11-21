@@ -1,21 +1,68 @@
 import os
+import re
+from operator import itemgetter
 
 
-def remove_duplicate_lines(_infilename, _outfilename):
+def remove_duplicate_lines(infilename, outfilename):
 	lines_seen = set()  # holds lines already seen
-	outfile = open(_outfilename, "w")
-	for line in open(_infilename, "r"):
-		if line not in lines_seen:  # not a duplicate
-			outfile.write(line)
-			lines_seen.add(line)
+	outfile = open(outfilename, "w")
+	infile = open(infilename, 'r')
+	# skip the heading line
+	infile.next()
+	for line in infile:
+		a_line = percentage_to_float(line)
+		b_line = rewrite_date(a_line)
+		if b_line not in lines_seen:  # not a duplicate
+			outfile.write(b_line)
+			lines_seen.add(b_line)
 	outfile.close()
 
 
-inpath = r'/Users/Dijkstraaaaa/Documents/BS Data'
-outpath = r'/Users/Dijkstraaaaa/Documents/Base Station'
-for root, dirs, files in os.walk(inpath):
+def percentage_to_float(inline):
+	inline = inline.strip()
+	words = inline.split('\t')
+	# transform the percentage number into float
+	for word_idx in range(len(words)):
+		if words[word_idx].endswith('%'):
+			words[word_idx] = str(float(words[word_idx][:-1]) / 100)
+	return '\t'.join(words) + '\n'
+
+
+def rewrite_date(inline):
+	inline = inline.strip()
+	words = inline.split('\t')
+	for word_idx in range(len(words)):
+		if '-' in words[word_idx]:
+			split_words = re.split(r'-| |:', words[word_idx])
+			# for _idx in range(len(split_words)):
+			# 	split_words[_idx] = str(int(split_words[_idx]))
+			words[word_idx] = '-'.join(split_words[0:4])
+		if '/' in words[word_idx]:
+			split_words = re.split(r'/| |:', words[word_idx])
+			for _idx in range(len(split_words)):
+				if len(split_words[_idx]) == 1:
+					split_words[_idx] = "0" + split_words[_idx]
+			words[word_idx] = '-'.join(split_words[0:4])
+	return '\t'.join(words) + '\n'
+
+
+def sort_by_date(inputfile, outputfile):
+	with open(inputfile, 'r') as fin:
+		lines = [line.split() for line in fin]
+		lines.sort(key=itemgetter(4))
+	with open(outputfile, 'w') as fout:
+		for el in lines:
+			fout.write('{0}\n'.format('\t'.join(el)))
+
+in_path = r'/Users/Dijkstraaaaa/Documents/TYPE2/origin2'
+tmp_path = r'/Users/Dijkstraaaaa/Documents/TYPE2/tmp'
+out_path = r'/Users/Dijkstraaaaa/Documents/TYPE2/reformat2'
+for root, dirs, files in os.walk(in_path):
 	for f in files:
 		if f.endswith('.txt'):
-			infile_path = os.path.join(inpath, f)
-			outfile_path = os.path.join(outpath, f)
-			remove_duplicate_lines(infile_path, outfile_path)
+			print f
+			infile_path = os.path.join(in_path, f)
+			tmpfile_path = os.path.join(tmp_path, f)
+			outfile_path = os.path.join(out_path, f)
+			remove_duplicate_lines(infile_path, tmpfile_path)
+			sort_by_date(tmpfile_path, outfile_path)

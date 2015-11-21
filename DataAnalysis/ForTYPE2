@@ -1,0 +1,139 @@
+# -*- coding: UTF-8 -*-
+import os
+import csv
+from openpyxl import load_workbook
+
+
+# column_dic = {"SUBNET_ID": 5, "NET_ELEMENT_ID": 6, "CELL_ID": 7, "START_TIME": 2, "END_TIME": 3, "UP_PRB_PEAK": 168,
+# 			  "UP_PRB_AVERAGE": 170, "UP_PRB_OVERLOAD": 173, "DOWN_PRB_PEAK": 169, "DOWN_PRB_AVERAGE": 171,
+# 			  "DOWN_PRB_OVERLOAD": 174}
+# column_name = ["SUBNET_ID", "NET_ELEMENT_ID", "CELL_ID", "START_TIME", "END_TIME", "UP_PRB_PEAK", "UP_PRB_AVERAGE",
+# 			   "UP_PRB_OVERLOAD", "DOWN_PRB_PEAK", "DOWN_PRB_AVERAGE", "DOWN_PRB_OVERLOAD"]
+
+column_dic = {'165': 165, '133': 133, '132': 132, '131': 131, '130': 130, '137': 137, '136': 136, '135': 135,
+			'134': 134, '139': 139, '138': 138, '166': 166, '24': 24, '25': 25, '26': 26, '27': 27, '20': 20,
+			'21': 21, '22': 22, '23': 23, '160': 160, '28': 28, '29': 29, '161': 161, '8': 8, '163': 163,
+			'119': 119, '120': 120, '121': 121, '122': 122, '123': 123, '124': 124, '125': 125, '126': 126,
+			'127': 127, '128': 128, '129': 129, '167': 167, '118': 118, '59': 59, '58': 58, '55': 55, '54': 54,
+			'57': 57, '56': 56, '51': 51, '50': 50, '53': 53, '52': 52, '164': 164, '179': 179, '195': 195,
+			'194': 194, '197': 197, '178': 178, '191': 191, '190': 190, '193': 193, '192': 192, '115': 115,
+			'114': 114, '88': 88, '89': 89, '111': 111, '110': 110, '113': 113, '112': 112, '82': 82, '83': 83,
+			'80': 80, '81': 81, '86': 86, '87': 87, '84': 84, '85': 85, '198': 198, '3': 3, '177': 177, 'CELL_ID': 7,
+			'108': 108, '109': 109, '102': 102, '103': 103, '100': 100, '101': 101, '106': 106, '107': 107,
+			'104': 104, '105': 105, '39': 39, '38': 38, '33': 33, '32': 32, '31': 31, '30': 30, '37': 37, '36': 36,
+			'35': 35, '34': 34, '176': 176, '60': 60, '61': 61, '62': 62, '63': 63, '64': 64, '65': 65, '66': 66,
+			'67': 67, '68': 68, '69': 69, '175': 175, '174': 174, '173': 173, '172': 172, '171': 171, '170': 170,
+			'181': 181, '182': 182, '183': 183, '180': 180, '2': 2, '162': 162, '187': 187, '184': 184,
+			'NET_ELEMENT_ID': 6,
+			'186': 186, '188': 188, '189': 189, '196': 196, '185': 185, '99': 99, '98': 98, '168': 168, '169': 169,
+			'91': 91, '90': 90, '93': 93, '92': 92, '95': 95, '94': 94, '97': 97, '96': 96, '11': 11, '10': 10,
+			'13': 13, '12': 12, '15': 15, '14': 14, '17': 17, '16': 16, '19': 19, '18': 18, '117': 117, '116': 116,
+			'151': 151, '150': 150, '153': 153, '152': 152, '155': 155, '154': 154, '157': 157, '156': 156,
+			'159': 159, '158': 158, '48': 48, '49': 49, '46': 46, '47': 47, '44': 44, '45': 45, '42': 42, '43': 43,
+			'40': 40, '41': 41, '1': 1, 'SUBNET_ID': 5, '9': 9, '146': 146, '147': 147, '144': 144, '145': 145,
+			'142': 142,
+			'143': 143, '140': 140, '141': 141, '148': 148, '149': 149, '77': 77, '76': 76, '75': 75, '74': 74,
+			'73': 73, '72': 72, '71': 71, '70': 70, '79': 79, '78': 78}
+column_name = ['1', '2', '3', 'SUBNET_ID', 'NET_ELEMENT_ID', 'CELL_ID', '8', '9', '10', '11', '12', '13', '14', '15',
+			'16', '17', '18', '19',
+			'20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36',
+			'37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53',
+			'54', '55', '56', '57', '58', '59', '60', '61', '62', '63', '64', '65', '66', '67', '68', '69', '70',
+			'71', '72', '73', '74', '75', '76', '77', '78', '79', '80', '81', '82', '83', '84', '85', '86', '87',
+			'88', '89', '90', '91', '92', '93', '94', '95', '96', '97', '98', '99', '100', '101', '102', '103',
+			'104', '105', '106', '107', '108', '109', '110', '111', '112', '113', '114', '115', '116', '117', '118',
+			'119', '120', '121', '122', '123', '124', '125', '126', '127', '128', '129', '130', '131', '132', '133',
+			'134', '135', '136', '137', '138', '139', '140', '141', '142', '143', '144', '145', '146', '147', '148',
+			'149', '150', '151', '152', '153', '154', '155', '156', '157', '158', '159', '160', '161', '162', '163',
+			'164', '165', '166', '167', '168', '169', '170', '171', '172', '173', '174', '175', '176', '177', '178',
+			'179', '180', '181', '182', '183', '184', '185', '186', '187', '188', '189', '190', '191', '192', '193',
+			'194', '195', '196', '197', '198']
+
+
+def generate_file_list(day_num, file_path):
+	# use DAY_NUM to generate empty 2-D list
+	file_matrix = []
+	while day_num != 0:
+		file_matrix.append([])
+		day_num -= 1
+
+	# walk the file path
+	for root, dirs, files in os.walk(file_path):
+		for f in files:
+			if f.startswith("TYPE2"):
+				f_words = f.split("_")
+				# date index
+				day_info = f_words[-2]
+				day_num = int(day_info[3:])
+				# file index
+				serial_info = f_words[-1]
+				file_matrix[day_num - 1].append(serial_info)
+	return file_matrix
+
+
+def extract_csv_file(csv_file_path, _output_folder_path):
+	global column_dic
+	global column_name
+	with open(csv_file_path, 'rb') as csv_file:
+		file_reader = csv.reader(csv_file)
+		for row in file_reader:
+			subnet_id = row[column_dic['SUBNET_ID'] - 1]
+			net_element_id = row[column_dic['NET_ELEMENT_ID'] - 1]
+			cell_id = row[column_dic['CELL_ID'] - 1]
+			output_file_name = '_'.join([str(subnet_id), str(net_element_id), str(cell_id)]) + '.txt'
+			output_file_path = os.path.join(_output_folder_path, output_file_name)
+			if not os.path.isfile(output_file_path):
+				output_file = open(output_file_path, 'a')
+				output_file.write("\t".join(column_name) + "\n")
+			else:
+				output_file = open(output_file_path, 'a')
+			content_list = []
+			for item in column_name:
+				content_list.append(row[column_dic[item] - 1])
+			output_file.write("\t".join(str(v) for v in content_list) + "\n")
+			output_file.close()
+
+
+def extract_excel_file(excel_file_path, output_folder_path):
+	global column_dic
+	global column_name
+	work_book = load_workbook(filename=excel_file_path)
+	work_sheet = work_book.worksheets[0]  # ws is now an IterableWorksheet
+	# The first 4 rows are table info
+	for row in range(work_sheet.min_row + 4, work_sheet.max_row + 1):
+		subnet_id = work_sheet.cell(row=row, column=column_dic['SUBNET_ID']).value
+		net_element_id = work_sheet.cell(row=row, column=column_dic['NET_ELEMENT_ID']).value
+		cell_id = work_sheet.cell(row=row, column=column_dic['CELL_ID']).value
+		output_file_name = '_'.join([str(subnet_id), str(net_element_id), str(cell_id)]) + '.txt'
+		output_file_path = os.path.join(output_folder_path, output_file_name)
+		if not os.path.isfile(output_file_path):
+			output_file = open(output_file_path, 'a')
+			output_file.write("\t".join(column_name) + "\n")
+		else:
+			output_file = open(output_file_path, 'a')
+		content_list = []
+		for item in column_name:
+			content_list.append(work_sheet.cell(row=row, column=column_dic[item]).value)
+		output_file.write("\t".join(str(v) for v in content_list) + "\n")
+		output_file.close()
+
+
+def main():
+	data_path = r'/Users/Dijkstraaaaa/Documents/remain'
+	output_path = r'/Users/Dijkstraaaaa/Documents/TYPE2/data'
+
+	file_matrix = generate_file_list(31, data_path)
+	for i in range(len(file_matrix)):
+		for j in range(len(file_matrix[i])):
+			file_name = 'TYPE2_Mon1_Day%s' % (i + 1) + '_%s' % file_matrix[i][j]
+			print file_name
+			# date = 'Day' + str(i + 1)
+			file_path = os.path.join(data_path, file_name)
+			# file_path = os.path.join(data_path, date, 'TYPE2', file_name)
+			if file_path.endswith("xlsx"):
+				extract_excel_file(file_path, output_path)
+			if file_path.endswith("csv"):
+				extract_csv_file(file_path, output_path)
+
+if __name__ == '__main__':
+	main()
