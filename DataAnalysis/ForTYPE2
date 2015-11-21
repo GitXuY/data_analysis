@@ -120,7 +120,7 @@ def extract_excel_file(excel_file_path, output_folder_path):
 
 def main():
 	data_path = r'/Users/Dijkstraaaaa/Documents/remain'
-	output_path = r'/Users/Dijkstraaaaa/Documents/TYPE2/data'
+	output_path = r'/Users/Dijkstraaaaa/Documents/TYPE2/tmp'
 
 	file_matrix = generate_file_list(31, data_path)
 	for i in range(len(file_matrix)):

@@ -1,16 +1,23 @@
 import os
 
 
-bad_words = ['[FDD]']
+def rename(file_path, file_name, file_idex):
+	if file_name.endswith("csv"):
+		new_file_name = str(file_idex + 1) + ".csv"
+		os.rename(os.path.join(file_path, file_name), os.path.join(file_path, new_file_name))
+	if file_name.endswith("xlsx"):
+		new_file_name = str(file_idex + 1) + ".xlsx"
+		os.rename(os.path.join(file_path, file_name), os.path.join(file_path, new_file_name))
 
-old_path = r'/Users/Dijkstraaaaa/Documents/TYPE2/reformat2'
-new_path = r'/Users/Dijkstraaaaa/Documents/TYPE2/tmp'
-for root, dirs, files in os.walk(old_path):
-	for f in files:
-		if f.endswith('.txt') and not f.startswith('_'):
-			print f
-			with open(os.path.join(old_path, f)) as old_file, open(
-				os.path.join(new_path, f)) as new_file:
-				for line in old_file:
-					if not any(bad_word in line for bad_word in bad_words):
-						new_file.write(line)
+
+def main(path):
+	for root, dirs, files in os.walk(path):
+		for dir in dirs:
+			list_dir = os.listdir(os.path.join(root, dir))
+			for f_idx in range(len(list_dir)):
+				rename(os.path.join(root, dir), list_dir[f_idx], f_idx)
+
+
+if __name__ == '__main__':
+	path = r'/Users/Dijkstraaaaa/Documents/hello'
+	main(path)

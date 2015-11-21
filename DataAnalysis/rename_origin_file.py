@@ -41,16 +41,21 @@ def generate_file_name(parent_dir, file_name):
 	return new_file_name
 
 
-path = r'E:\Data'
-for root, dirs, files in os.walk(path):
-	for folder_idx in range(len(dirs)):
-		dir_word = u'dirs[folder_idx]'
-		print dir_word
-		new_folder_name = generate_folder_name(dirs[folder_idx])
-		os.rename(os.path.join(root, dirs[folder_idx]), os.path.join(root, new_folder_name))
-		dirs[folder_idx] = new_folder_name
-	# for file_idx in range(len(files)):
-	# 	new_file_name = generate_file_name(root, files[file_idx])
-	# 	print new_file_name
-	# 	os.rename(os.path.join(root, files[file_idx]), os.path.join(root, new_file_name))
-	# 	files[file_idx] = new_file_name
+def main(path):
+	for root, dirs, files in os.walk(path):
+		for folder_idx in range(len(dirs)):
+			print dirs[folder_idx]
+		# new_folder_name = generate_folder_name(dirs[folder_idx])
+		# os.rename(os.path.join(root, dirs[folder_idx]), os.path.join(root, new_folder_name))
+		# dirs[folder_idx] = new_folder_name
+		# for file_idx in range(len(files)):
+		# 	new_file_name = generate_file_name(root, files[file_idx])
+		# 	print new_file_name
+		# 	os.rename(os.path.join(root, files[file_idx]), os.path.join(root, new_file_name))
+		# 	files[file_idx] = new_file_name
+
+
+if __name__ == '__main__':
+	path = r'/Volumes/XUY/data'
+	main(path)
+

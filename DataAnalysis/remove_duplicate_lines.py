@@ -49,14 +49,14 @@ def rewrite_date(inline):
 def sort_by_date(inputfile, outputfile):
 	with open(inputfile, 'r') as fin:
 		lines = [line.split() for line in fin]
-		lines.sort(key=itemgetter(4))
+		lines.sort(key=itemgetter(2))
 	with open(outputfile, 'w') as fout:
 		for el in lines:
 			fout.write('{0}\n'.format('\t'.join(el)))
 
-in_path = r'/Users/Dijkstraaaaa/Documents/TYPE2/origin2'
-tmp_path = r'/Users/Dijkstraaaaa/Documents/TYPE2/tmp'
-out_path = r'/Users/Dijkstraaaaa/Documents/TYPE2/reformat2'
+in_path = r'/Users/Dijkstraaaaa/Documents/TYPE2/tmp'
+tmp_path = r'/Users/Dijkstraaaaa/Documents/TYPE2/tmp2'
+out_path = r'/Users/Dijkstraaaaa/Documents/TYPE2/Data'
 for root, dirs, files in os.walk(in_path):
 	for f in files:
 		if f.endswith('.txt'):
