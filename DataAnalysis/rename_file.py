@@ -41,7 +41,7 @@ def generate_file_name(parent_dir, file_name):
 	return new_file_name
 
 
-path = r'/Users/Dijkstraaaaa/Documents/Data/'
+path = r'/Users/Dijkstraaaaa/Documents/LTE/Data/'
 for root, dirs, files in os.walk(path):
 	for folder_idx in range(len(dirs)):
 		new_folder_name = generate_folder_name(dirs[folder_idx])
