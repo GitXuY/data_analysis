@@ -27,28 +27,30 @@ def generate_folder_name(folder_name):
 	return new_folder_name
 
 
-def generate_file_name(parent_dir, file_name):
-	if (file_name.endswith("csv") or file_name.endswith("xlsx")) and (not file_name.startswith("TYPE")):
-		dir_words = parent_dir.split('/')
+def generate_file_name(root, file_name):
+	if file_name.endswith("csv") or file_name.endswith("xlsx"):
+		# print parent_dir
+		dir_words = root.split('/')
+		print dir_words
 		type_name = dir_words[-1]
 		day_name = dir_words[-2]
 		mon_name = dir_words[-3]
+		f_list = file_name.split('_')
 		sep = "_"
-		sequence = (type_name, mon_name, day_name, file_name)
+		sequence = (type_name, mon_name, day_name, f_list[-1])
 		new_file_name = sep.join(sequence)
 	else:
 		new_file_name = file_name
 	return new_file_name
 
 
-path = r'/Users/Dijkstraaaaa/Documents/LTE/Data/'
+path = r'/Users/Dijkstraaaaa/Documents/LTE/Data/Mon2'
 for root, dirs, files in os.walk(path):
-	for folder_idx in range(len(dirs)):
-		new_folder_name = generate_folder_name(dirs[folder_idx])
-		os.rename(os.path.join(root, dirs[folder_idx]), os.path.join(root, new_folder_name))
-		dirs[folder_idx] = new_folder_name
+	# for folder_idx in range(len(dirs)):
+	# 	new_folder_name = generate_folder_name(dirs[folder_idx])
+	# 	os.rename(os.path.join(root, dirs[folder_idx]), os.path.join(root, new_folder_name))
+	# 	dirs[folder_idx] = new_folder_name
 	for file_idx in range(len(files)):
 		new_file_name = generate_file_name(root, files[file_idx])
-		print new_file_name
 		os.rename(os.path.join(root, files[file_idx]), os.path.join(root, new_file_name))
 		files[file_idx] = new_file_name
