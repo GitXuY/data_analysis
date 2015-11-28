@@ -37,10 +37,10 @@ def extract_csv_file(csv_file_path, output_folder_path, type_num):
 
 def main():
 	# data_path = r'/Users/Dijkstraaaaa/Documents/LTE/Data/Mon2'
-	data_path = r'/Users/Dijkstraaaaa/Documents/LTE/remain'
-	TYPE1_output_path = r'/Users/Dijkstraaaaa/Documents/LTE/TYPE1/Mon1'
-	TYPE2_output_path = r'/Users/Dijkstraaaaa/Documents/LTE/TYPE2/Mon1'
-	TYPE3_output_path = r'/Users/Dijkstraaaaa/Documents/LTE/TYPE3/Mon1'
+	data_path = r'/Volumes/WIN/LTE/Data/Mon9'
+	TYPE1_output_path = r'/Volumes/WIN/LTE/TYPE1/Mon9'
+	TYPE2_output_path = r'/Volumes/WIN/LTE/TYPE2/Mon9'
+	TYPE3_output_path = r'/Volumes/WIN/LTE/TYPE3/Mon9'
 	output_path_list = [TYPE1_output_path, TYPE2_output_path, TYPE3_output_path]
 	# walk the file path
 	for root, dirs, files in os.walk(data_path):

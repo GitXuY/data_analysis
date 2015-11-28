@@ -56,7 +56,7 @@ def csv_from_csv(filename, input_folder_path, output_folder_path):
 
 
 def main():
-	data_path = r'/Users/Dijkstraaaaa/Documents/tmp/Data'
+	data_path = r'/Volumes/WIN/LTE/Mon9'
 	# walk the file path
 	for root, dirs, files in os.walk(data_path):
 		for f in files:
