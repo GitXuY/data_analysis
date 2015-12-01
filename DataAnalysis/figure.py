@@ -48,7 +48,7 @@ def plot_figure(data_list, start_date, end_date, y_label):
 
 
 def main():
-	path = r'/Users/Dijkstraaaaa/Documents/LTE/TYPE2/Mon1/320505_269582_49_reformat.csv'
+	path = r'/Users/Dijkstraaaaa/Documents/LTE/TYPE2/Mon9/320505_269582_49_reformat.csv'
 	data_type = 2
 	column_name = "PRB down average"
 	data_list = extract_data(path, data_type, column_name)
