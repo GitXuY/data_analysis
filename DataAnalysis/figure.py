@@ -18,7 +18,7 @@ def extract_data(file_path, data_type, column_name):
 	"""
 	read file and extract the given column
 	:param data_type:
-	:param file_path:
+	:param file_path: 
 	:param column_name:
 	:return: list
 	"""
@@ -48,7 +48,7 @@ def plot_figure(data_list, start_date, end_date, y_label):
 
 
 def main():
-	path = r'/Users/Dijkstraaaaa/Documents/LTE/TYPE2/Mon9/320505_269582_49_reformat.csv'
+	path = r'/Users/Dijkstraaaaa/Documents/LTE/TYPE2/Mon8/TYPE2_Mon8_320505_269582_49_reformat.csv'
 	data_type = 2
 	column_name = "PRB down average"
 	data_list = extract_data(path, data_type, column_name)

@@ -95,9 +95,9 @@ def voronoi_finite_polygons_2d(vor, radius=None):
 
 # make up data points
 
-bk = xlrd.open_workbook("/Users/Dijkstraaaaa/Documents/20151126/district.xls")
+bk = xlrd.open_workbook("/Users/Dijkstraaaaa/Documents/LTE/changshu_location.csv")
 #shxrange = range(bk.nsheets)
-sh = bk.sheet_by_name("city")
+sh = bk.sheet_by_name("changshu_location")
 
 nrows = sh.nrows
 

@@ -31,24 +31,36 @@ def extract_csv_file(csv_file_path, output_folder_path, type_num):
 			output_file = open(output_file_path, 'a')
 			# write row
 			wr = csv.writer(output_file, quoting=csv.QUOTE_ALL)
-			wr.writerow(row)
-			output_file.close()
+			try:
+				if row[166].find('%') == -1:
+					write_row = [int(float(row[0])), row[1], row[2], int(float(row[3])), int(float(row[4])),
+					             int(float(row[5])), 100 * float(row[166]), 100 * float(row[167]),
+					             100 * float(row[168]), 100 * float(row[169])]
+				else:
+					write_row = [int(float(row[0])), row[1], row[2], int(float(row[3])), int(float(row[4])),
+					             int(float(row[5])), float(row[166].replace('%', '')), float(row[167].replace('%', '')),
+					             float(row[168].replace('%', '')), float(row[169].replace('%', ''))]
+				wr.writerow(write_row)
+			except Exception, e:
+				print csv_file_path
+				print Exception, ":", e
+		output_file.close()
 
 
 def main():
 	# data_path = r'/Users/Dijkstraaaaa/Documents/LTE/Data/Mon2'
-	data_path = r'/Users/Dijkstraaaaa/Documents/BSDataAnalysis/Data/Data/Mon8'
-	TYPE1_output_path = r'/Users/Dijkstraaaaa/Documents/BSDataAnalysis/Data/TYPE1/Mon8'
+	data_path = r'/Users/Dijkstraaaaa/Documents/BSDataAnalysis/Data/Mon8'
+	# data_path = r'/Users/Dijkstraaaaa/Documents/BSDataAnalysis/Data/data_test'
 	TYPE2_output_path = r'/Users/Dijkstraaaaa/Documents/BSDataAnalysis/Data/TYPE2/Mon8'
-	TYPE3_output_path = r'/Users/Dijkstraaaaa/Documents/BSDataAnalysis/Data/TYPE3/Mon8'
-	output_path_list = [TYPE1_output_path, TYPE2_output_path, TYPE3_output_path]
+	# TYPE2_output_path = r'/Users/Dijkstraaaaa/Documents/BSDataAnalysis/Data/data_test/out'
+	output_path = TYPE2_output_path
 	# walk the file path
 	for root, dirs, files in os.walk(data_path):
 		for f in files:
-			if f.startswith("TYPE") and f.endswith("csv"):
-				type_num = f[4]
+			if f.startswith("TYPE2") and f.endswith("csv"):
+			# if f.startswith("data") and f.endswith("csv"):
+				type_num = 2
 				print f
-				output_path = output_path_list[int(float(type_num)) - 1]
 				file_path = os.path.join(root, f)
 				extract_csv_file(file_path, output_path, type_num)
 

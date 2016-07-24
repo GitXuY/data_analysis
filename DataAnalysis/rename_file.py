@@ -45,7 +45,7 @@ def generate_file_name(root_path, file_name, count):
 
 
 def main():
-	path = r'/Volumes/WIN/LTE/Mon9'
+	path = r'/Users/Dijkstraaaaa/Documents/BSDataAnalysis/Data/data_test'
 	for root, dirs, files in os.walk(path):
 		for folder_idx in range(len(dirs)):
 			new_folder_name = generate_folder_name(dirs[folder_idx])

@@ -48,7 +48,7 @@ def reformat_date(row):
 
 
 def main():
-	folder_path = r'/Users/Dijkstraaaaa/Documents/LTE/TYPE2'
+	folder_path = r'/Users/Dijkstraaaaa/Documents/BSDataAnalysis/Data/data_test'
 	for root, dirs, files in os.walk(folder_path):
 		for f in files:
 			if f.endswith('.csv') and not f.endswith('reformat.csv'):
