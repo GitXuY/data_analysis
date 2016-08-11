@@ -47,7 +47,7 @@ def main():
 		for f in files:
 			if f.startswith("TYPE") and f.endswith("csv"):
 				type_num = f[4]
-				print f
+				print(f)
 				output_path = output_path_list[int(float(type_num)) - 1]
 				file_path = os.path.join(root, f)
 				extract_csv_file(file_path, output_path, type_num)

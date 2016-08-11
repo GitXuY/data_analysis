@@ -9,4 +9,4 @@ while column !=199:
 column_name2 = column_name
 # print column2
 zipped = zip(column_name, column_name2)
-print dict(zipped)
+print(dict(zipped))

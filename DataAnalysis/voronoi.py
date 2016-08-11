@@ -113,31 +113,31 @@ points=[[0 for x in range(2)] for y in range(111)]
 for i in range(1,nrows):
         output['lon'].append(sh.cell(i,2).value)
         output['lat'].append(sh.cell(i,1).value)
-print output['lat'][0]
+print(output['lat'][0])
 
 points[0][0]=output['lat'][0]
 points[0][1]=output['lon'][0]
 #print  points[0][1]
 
 points = np.random.rand(111, 2)
-print points
+print(points)
 for k in range(111):
     points[k][0]=output['lat'][k]
     points[k][1]=output['lon'][k]
 
-print points
+print(points)
 
 #points = np.random.rand(15, 2)
 #print points
 # compute Voronoi tesselation
 vor = Voronoi(points)
-print vor
+print(vor)
 # plot
 regions, vertices = voronoi_plot_2d(vor)
-print "--"
-print regions
-print "--"
-print vertices
+# print "--"
+# print regions
+# print "--"
+# print vertices
 
 # colorize
 for region in regions:

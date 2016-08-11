@@ -62,7 +62,7 @@ def main():
 		for f in files:
 			if f.startswith('TYPE'):
 				is_done = False
-				print f
+				print(f)
 				if f.endswith('csv'):
 					is_done = csv_from_csv(f, root, root)
 				if f.endswith('xlsx'):
